@@ -23,6 +23,15 @@ namespace WebAppTutoriaL
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseStaticFiles();
+
+            app.UseMvc(config =>
+            {
+                config.MapRoute(
+                    name: "Default",
+                    template: "{controller}/{action}/{Id?}",
+                    defaults: new { controller = "App", action = "Index" }
+                    );
+            });
         }
     }
 }
