@@ -1,11 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using WebAppTutoriaL.Services;
 using WebAppTutoriaL.ViewModels;
 
 namespace Webtutorial.Controllers.Web
 {
     public class AppController:Controller
     {
+        private IMailService _mailService;
+
+        public AppController(IMailService service)
+        {
+            _mailService = service;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -24,6 +32,11 @@ namespace Webtutorial.Controllers.Web
         [HttpPost]
         public IActionResult Contact(ContactViewModel model)
         {
+            _mailService.SendMail("",
+                "",
+                $"Contact page from {model.Name} ({model.Email})",
+                model.Message);
+
             return View();
         }
     }
