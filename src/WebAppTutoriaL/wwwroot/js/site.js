@@ -21,13 +21,16 @@
 
 
     var $sidebarandwrapper = $('#sidebar,#wrapper');
+    var $icon = $('#sidebarToggle i.fa');
 
     $('#sidebarToggle').on('click', function () {
         $sidebarandwrapper.toggleClass('hide-sidebar');
         if ($sidebarandwrapper.hasClass('hide-sidebar')) {
-            $(this).text('Show sidebar');
+            $icon.removeClass('fa-angle-left');
+            $icon.addClass('fa-angle-right');
         } else {
-            $(this).text('Hide sidebar');
+            $icon.addClass('fa-angle-left');
+            $icon.removeClass('fa-angle-right');
         }
     })
 })();

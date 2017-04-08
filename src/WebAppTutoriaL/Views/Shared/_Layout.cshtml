@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <title>The world - @ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/CSS/site.css" rel="stylesheet" />
+
 </head>
 <body>
     <div id="sidebar">
@@ -18,7 +21,9 @@
     <div id="wrapper">
         <div id="main">
             <div>
-                <button id="sidebarToggle">Hide sidebar </button>
+                <button id="sidebarToggle" class="btn btn-primary btn-sm">
+                    <i class="fa fa-angle-left"></i>
+                </button>
             </div>
 
             <div>
@@ -27,10 +32,11 @@
 
         </div>
         <div id="footer">
-            &copy; 2017 The World Ltd
+            <p class="text-primary">&copy; 2017 The World Ltd</p>
         </div>
     </div>
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
 
     @RenderSection("Scripts",false)
