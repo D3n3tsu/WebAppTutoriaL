@@ -36,7 +36,8 @@ namespace WebAppTutoriaL
             string connection = Startup.Configuration["Data:WorldContextConnection"];//@"Data Source=DESKTOP-POJ7D9K\SQLEXPRESS;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<WorldContext>(options => options.UseSqlServer(connection));
 
-
+            services.AddTransient<WorldContextSeedData>();
+            services.AddScoped<IWorldRepository, WorldRepository>();
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();
 #else
@@ -45,7 +46,7 @@ namespace WebAppTutoriaL
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {
             app.UseStaticFiles();
 
@@ -57,6 +58,8 @@ namespace WebAppTutoriaL
                     defaults: new { controller = "App", action = "Index" }
                     );
             });
+
+            seeder.EnsureSeedData();
         }
     }
 }
