@@ -3,21 +3,26 @@ using System;
 using WebAppTutoriaL;
 using WebAppTutoriaL.Services;
 using WebAppTutoriaL.ViewModels;
+using System.Linq;
+using WebAppTutoriaL.Models;
 
 namespace Webtutorial.Controllers.Web
 {
     public class AppController:Controller
     {
         private IMailService _mailService;
+        private WorldContext _context;
 
-        public AppController(IMailService service)
+        public AppController(IMailService service, WorldContext context)
         {
             _mailService = service;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var trips = _context.Trips.OrderBy(t => t.Name).ToList();
+            return View(trips);
         }
 
         public IActionResult About()
