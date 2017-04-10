@@ -11,6 +11,7 @@ using WebAppTutoriaL.Services;
 using Microsoft.Extensions.Configuration;
 using WebAppTutoriaL.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 
 namespace WebAppTutoriaL
 {
@@ -31,7 +32,13 @@ namespace WebAppTutoriaL
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opt=>
+                {
+                    opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
+
+
             services.AddLogging();
 
             string connection = Startup.Configuration["Data:WorldContextConnection"];//@"Data Source=DESKTOP-POJ7D9K\SQLEXPRESS;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
