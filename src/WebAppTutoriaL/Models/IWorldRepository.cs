@@ -6,5 +6,7 @@ namespace WebAppTutoriaL.Models
     {
         IEnumerable<Trip> GetAllTrips();
         IEnumerable<Trip> GetAllTripsWithStops();
+        void AddTrip(Trip newTrip);
+        bool SaveAll();
     }
 }
