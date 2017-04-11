@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebAppTutoriaL.Models;
 using System.Net;
 using WebAppTutoriaL.ViewModels;
+using AutoMapper;
 
 namespace WebAppTutoriaL.Controllers.Api
 {
@@ -22,17 +23,30 @@ namespace WebAppTutoriaL.Controllers.Api
         [HttpGet("")]
         public JsonResult Get()
         {
-            var results = _repository.GetAllTripsWithStops();
+            var results = Mapper.Map < IEnumerable< TripViewModel >> (_repository.GetAllTripsWithStops());
 
             return Json(results);
         }
 
         [HttpPost("")]
-        public JsonResult Post([FromBody]TripViewModel newTrip)
+        public JsonResult Post([FromBody]TripViewModel vm)
         {
-            if (ModelState.IsValid) {
-                Response.StatusCode = (int)HttpStatusCode.Created;
-                return Json(true);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var newTrip = Mapper.Map<Trip>(vm);
+
+                    //Save to database
+
+                    Response.StatusCode = (int)HttpStatusCode.Created;
+                    return Json(Mapper.Map<TripViewModel>(newTrip));
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { Message = ex.Message });
             }
 
             Response.StatusCode = (int)HttpStatusCode.BadRequest;

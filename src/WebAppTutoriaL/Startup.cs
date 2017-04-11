@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using WebAppTutoriaL.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
+using AutoMapper;
+using WebAppTutoriaL.ViewModels;
 
 namespace WebAppTutoriaL
 {
@@ -56,9 +58,14 @@ namespace WebAppTutoriaL
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {
-            loggerFactory.AddDebug(LogLevel.Information); 
+            loggerFactory.AddDebug(LogLevel.Information);
 
             app.UseStaticFiles();
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Trip, TripViewModel>().ReverseMap();
+            });
 
             app.UseMvc(config =>
             {
