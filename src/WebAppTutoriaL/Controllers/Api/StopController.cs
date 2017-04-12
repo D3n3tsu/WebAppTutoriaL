@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using WebAppTutoriaL.Models;
+using WebAppTutoriaL.Services;
 using WebAppTutoriaL.ViewModels;
 
 namespace WebAppTutoriaL.Controllers.Api
@@ -14,13 +15,17 @@ namespace WebAppTutoriaL.Controllers.Api
     [Route("api/trips/{tripName}/stops")]
     public class StopController : Controller
     {
+        private CoordService _coordService;
         private ILogger<StopController> _logger;
         private IWorldRepository _repository;
 
-        public StopController(IWorldRepository repository, ILogger<StopController> logger)
+        public StopController(IWorldRepository repository, 
+            ILogger<StopController> logger,
+            CoordService coordService)
         {
             _repository = repository;
             _logger = logger;
+            _coordService = coordService;
         }
 
         [HttpGet("")]
@@ -53,6 +58,16 @@ namespace WebAppTutoriaL.Controllers.Api
                     //Map to entity
                     var newStop = Mapper.Map<Stop>(vm);
                     //Looking up geocoordinates
+                    var coordResult = _coordService.LookUp(newStop.Name);
+
+                    if (!coordResult.Success)
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        Json(coordResult.Message);
+                    }
+
+                    newStop.Latitude = coordResult.Latitude;
+                    newStop.Longitude = coordResult.Longitude;
 
                     //Save to the database
                     _repository.AddStop(tripName, newStop);
