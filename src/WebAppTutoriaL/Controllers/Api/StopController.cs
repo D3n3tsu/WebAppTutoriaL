@@ -49,7 +49,7 @@ namespace WebAppTutoriaL.Controllers.Api
         }
 
         [HttpPost("")]
-        public JsonResult Post(string tripName, [FromBody]StopViewModel vm)
+        public async Task<JsonResult> Post(string tripName, [FromBody]StopViewModel vm)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace WebAppTutoriaL.Controllers.Api
                     //Map to entity
                     var newStop = Mapper.Map<Stop>(vm);
                     //Looking up geocoordinates
-                    var coordResult = _coordService.LookUp(newStop.Name);
+                    var coordResult = await _coordService.LookUp(newStop.Name);
 
                     if (!coordResult.Success)
                     {

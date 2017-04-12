@@ -21,7 +21,8 @@
       "type": "build"
     },
     "Microsoft.Extensions.Logging.Debug": "1.1.1",
-    "AutoMapper": "4.0.4"
+    "AutoMapper": "4.0.4",
+    "System.Net.Http": "4.3.0"
   },
 
   "tools": {
