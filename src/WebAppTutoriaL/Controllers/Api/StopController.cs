@@ -42,5 +42,36 @@ namespace WebAppTutoriaL.Controllers.Api
                 return Json("Error occurred finding trip name.");
             }
         }
+
+        [HttpPost("")]
+        public JsonResult Post(string tripName, [FromBody]StopViewModel vm)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //Map to entity
+                    var newStop = Mapper.Map<Stop>(vm);
+                    //Looking up geocoordinates
+
+                    //Save to the database
+                    _repository.AddStop(tripName, newStop);
+                    if (_repository.SaveAll())
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Created;
+                        return Json(Mapper.Map<StopViewModel>(newStop));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to save new stop", ex);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Failed to save new stop");
+            }
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json("Validation failed on new stop");
+        }
     }
 }

@@ -18,6 +18,13 @@ namespace WebAppTutoriaL.Models
             _logger = logger;
         }
 
+        public void AddStop(string tripName, Stop newStop)
+        {
+            var theTrip = GetTripByName(tripName);
+            newStop.Order = _context.Stops.Max(s => s.Order)+1;
+            _context.Stops.Add(newStop);
+        }
+
         public void AddTrip(Trip newTrip)
         {
             _context.Add(newTrip);
