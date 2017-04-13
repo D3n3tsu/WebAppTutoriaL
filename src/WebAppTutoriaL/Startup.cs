@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using WebAppTutoriaL.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebAppTutoriaL
 {
@@ -40,6 +41,17 @@ namespace WebAppTutoriaL
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
 
+            services.AddIdentity<WebAppUser, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 8;
+            })
+            .AddEntityFrameworkStores<WorldContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Cookies.ApplicationCookie.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Auth/Login");
+            });
 
             services.AddLogging();
 
@@ -62,6 +74,8 @@ namespace WebAppTutoriaL
             loggerFactory.AddDebug(LogLevel.Information);
 
             app.UseStaticFiles();
+
+            app.UseIdentity();
 
             Mapper.Initialize(config =>
             {
