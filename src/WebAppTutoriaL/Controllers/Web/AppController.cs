@@ -5,6 +5,7 @@ using WebAppTutoriaL.Services;
 using WebAppTutoriaL.ViewModels;
 using System.Linq;
 using WebAppTutoriaL.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Webtutorial.Controllers.Web
 {
@@ -20,6 +21,12 @@ namespace Webtutorial.Controllers.Web
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Trips()
         {
             var trips = _repository.GetAllTrips();
             return View(trips);
