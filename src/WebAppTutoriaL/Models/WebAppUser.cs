@@ -5,6 +5,6 @@ namespace WebAppTutoriaL.Models
 {
     public class WebAppUser : IdentityUser
     {
-        public DateTime FirstTrip { get; set; }
+        public DateTime FirstTripPlan { get; set; }
     }
 }
