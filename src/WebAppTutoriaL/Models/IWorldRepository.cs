@@ -8,8 +8,8 @@ namespace WebAppTutoriaL.Models
         IEnumerable<Trip> GetAllTripsWithStops();
         void AddTrip(Trip newTrip);
         bool SaveAll();
-        Trip GetTripByName(string tripName);
-        void AddStop(string tripName, Stop newStop);
+        Trip GetTripByName(string tripName, string username);
+        void AddStop(string tripName, Stop newStop, string username);
         IEnumerable<Trip> GetUserTripsWithStops(string name);
     }
 }

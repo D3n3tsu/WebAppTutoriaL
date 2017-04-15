@@ -18,9 +18,9 @@ namespace WebAppTutoriaL.Models
             _logger = logger;
         }
 
-        public void AddStop(string tripName, Stop newStop)
+        public void AddStop(string tripName, Stop newStop, string username)
         {
-            var theTrip = GetTripByName(tripName);
+            var theTrip = GetTripByName(tripName, username);
             newStop.Order = _context.Stops.Max(s => s.Order)+1;
             theTrip.Stops.Add(newStop);
             _context.Stops.Add(newStop);
@@ -83,10 +83,10 @@ namespace WebAppTutoriaL.Models
             return _context.SaveChanges()>0;
         }
 
-        public Trip GetTripByName(string tripName)
+        public Trip GetTripByName(string tripName, string username)
         {
             return _context.Trips.Include(t => t.Stops)
-                .Where(t => t.Name == tripName)
+                .Where(t => t.Name == tripName && t.UserName == username)
                 .FirstOrDefault();
         }
     }

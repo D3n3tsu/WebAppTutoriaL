@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,6 +13,7 @@ using WebAppTutoriaL.ViewModels;
 
 namespace WebAppTutoriaL.Controllers.Api
 {
+    [Authorize]
     [Route("api/trips/{tripName}/stops")]
     public class StopController : Controller
     {
@@ -19,7 +21,7 @@ namespace WebAppTutoriaL.Controllers.Api
         private ILogger<StopController> _logger;
         private IWorldRepository _repository;
 
-        public StopController(IWorldRepository repository, 
+        public StopController(IWorldRepository repository,
             ILogger<StopController> logger,
             CoordService coordService)
         {
@@ -33,7 +35,7 @@ namespace WebAppTutoriaL.Controllers.Api
         {
             try
             {
-                var results = _repository.GetTripByName(tripName);
+                var results = _repository.GetTripByName(tripName, User.Identity.Name);
 
                 if (results == null)
                     return Json(null);
@@ -70,7 +72,7 @@ namespace WebAppTutoriaL.Controllers.Api
                     newStop.Longitude = coordResult.Longitude;
 
                     //Save to the database
-                    _repository.AddStop(tripName, newStop);
+                    _repository.AddStop(tripName, newStop, User.Identity.Name);
                     if (_repository.SaveAll())
                     {
                         Response.StatusCode = (int)HttpStatusCode.Created;
