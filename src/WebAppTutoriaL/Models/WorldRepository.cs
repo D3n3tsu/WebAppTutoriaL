@@ -60,16 +60,34 @@ namespace WebAppTutoriaL.Models
             }
         }
 
-        public Trip GetTripByName(string tripName)
+
+        public IEnumerable<Trip> GetUserTripsWithStops(string name)
         {
-            return _context.Trips.Include(t => t.Stops)
-                .Where(t => t.Name == tripName)
-                .FirstOrDefault();
+            try
+            {
+                return _context.Trips
+                    .Include(t => t.Stops)
+                    .OrderBy(t => t.Name)
+                    .Where(t => t.UserName == name)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Could not get trips and stops from database", ex);
+                return null;
+            }
         }
 
         public bool SaveAll()
         {
             return _context.SaveChanges()>0;
+        }
+
+        public Trip GetTripByName(string tripName)
+        {
+            return _context.Trips.Include(t => t.Stops)
+                .Where(t => t.Name == tripName)
+                .FirstOrDefault();
         }
     }
 }

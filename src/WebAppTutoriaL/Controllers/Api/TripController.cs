@@ -28,7 +28,8 @@ namespace WebAppTutoriaL.Controllers.Api
         [HttpGet("")]
         public JsonResult Get()
         {
-            var results = Mapper.Map < IEnumerable< TripViewModel >> (_repository.GetAllTripsWithStops());
+            var trips = _repository.GetUserTripsWithStops(User.Identity.Name);
+            var results = Mapper.Map<IEnumerable<TripViewModel>>(trips);
 
             return Json(results);
         }
@@ -41,6 +42,7 @@ namespace WebAppTutoriaL.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var newTrip = Mapper.Map<Trip>(vm);
+                    newTrip.UserName = User.Identity.Name;
 
                     //Save to database
                     _logger.LogInformation("Attempting to save a new trip");
