@@ -16,6 +16,8 @@ using AutoMapper;
 using WebAppTutoriaL.ViewModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
 
 namespace WebAppTutoriaL
 {
@@ -42,7 +44,7 @@ namespace WebAppTutoriaL
 #if !DEBUG
                 config.Filters.Add(new RequireHttpsAttribute());
 #endif
-                })   
+                })
                 .AddJsonOptions(opt=>
                 {
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -55,9 +57,26 @@ namespace WebAppTutoriaL
             })
             .AddEntityFrameworkStores<WorldContext>();
 
+
             services.Configure<IdentityOptions>(options =>
             {
-                options.Cookies.ApplicationCookie.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Auth/Login");
+                options.Cookies.ApplicationCookie.LoginPath = new PathString("/Auth/Login");
+                options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = ctx =>
+                    {
+                        if(ctx.Request.Path.StartsWithSegments("/api")
+                        && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        return Task.FromResult(0);
+                    }
+                };
             });
 
             services.AddLogging();

@@ -8,9 +8,11 @@ using System.Net;
 using WebAppTutoriaL.ViewModels;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAppTutoriaL.Controllers.Api
 {
+    [Authorize]
     [Route("api/trips")]
     public class TripController : Controller
     {
