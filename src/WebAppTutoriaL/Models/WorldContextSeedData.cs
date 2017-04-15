@@ -29,7 +29,7 @@ namespace WebAppTutoriaL.Models
                     Email = "sam.hastings@webapp.com"
                 };
 
-                await _userManager.CreateAsync(newUser, "password");
+                await _userManager.CreateAsync(newUser, "P@ssw0rd");
             }
 
 
