@@ -97,7 +97,14 @@ namespace WebAppTutoriaL
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {
-            loggerFactory.AddDebug(LogLevel.Information);
+            if(env.IsDevelopment()){
+                loggerFactory.AddDebug(LogLevel.Information);
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                loggerFactory.AddDebug(LogLevel.Debug);
+            }
 
             app.UseStaticFiles();
 
