@@ -90,7 +90,7 @@ namespace WebAppTutoriaL
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();
 #else
-            services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IMailService, DebugMailService>();
 #endif
         }
 
